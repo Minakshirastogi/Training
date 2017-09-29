@@ -1,0 +1,497 @@
+show databases;
++---------------------------+
+| Database                  |
++---------------------------+
+| information_schema        |
+| Beryl_Systems             |
+| Beryl_Systems_test        |
+| company                   |
+| hospital                  |
+| iparksmart_backend        |
+| mobileshop                |
+| mysql                     |
+| performance_schema        |
+| trademarks411_development |
+| trademarks411_test        |
++---------------------------+
+mysql> create database college ;
+mysql> use college;
+mysql> create table student ( StudentId int NOT NULL, FirstName varchar(200), LastName varchar(100), Age int, PhoneNumber int , Address varchar (200));
+alter table student add primary key (StudentId);
+show tables; 
+mysql> show tables;
++-------------------+
+| Tables_in_college |
++-------------------+
+| student           |
++-------------------+
+mysql> show columns from student;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| StudentId   | int(11)      | NO   | PRI | NULL    |       |
+| FirstName   | varchar(200) | YES  |     | NULL    |       |
+| LastName    | varchar(100) | YES  |     | NULL    |       |
+| Age         | int(11)      | YES  |     | NULL    |       |
+| PhoneNumber | int(11)      | YES  |     | NULL    |       |
+| Address     | varchar(200) | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+mysql> alter table student add S_Department varchar(200);
+mysql> show columns from student;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| StudentId    | int(11)      | NO   | PRI | NULL    |       |
+| FirstName    | varchar(200) | YES  |     | NULL    |       |
+| LastName     | varchar(100) | YES  |     | NULL    |       |
+| Age          | int(11)      | YES  |     | NULL    |       |
+| PhoneNumber  | int(11)      | YES  |     | NULL    |       |
+| Address      | varchar(200) | YES  |     | NULL    |       |
+| S_Department | varchar(200) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+mysql> create table Department (DeptId int Not Null, S_Department varchar (200), Primary key (DeptId));
+mysql> show tables;
+| Tables_in_college |
++-------------------+
+| Department        |
+| student           |
++-------------------+
+mysql> show columns from Department;
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| DeptId       | int(11)      | NO   | PRI | NULL    |       |
+| S_Department | varchar(200) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+
+mysql> create table student_Department ( StudentId int Not null , DeptId int not null);
+mysql> show tables;
++--------------------+
+| Tables_in_college  |
++--------------------+
+| Department         |
+| student            |
+| student_Department |
++--------------------+
+mysql> show columns from student_Department;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| StudentId | int(11) | NO   |     | NULL    |       |
+| DeptId    | int(11) | NO   |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+
+mysql> INSERT INTO student VALUES ( 2,'de',' fg', 18,1234567898, 'kalkaji','electrical');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO student VALUES ( 3,'ef',' re', 23,1234567899, 'kalkaji','electronics');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO student VALUES ( 4,'eg',' rf', 20,1234567888, 'badarpur','computer science');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student VALUES ( 5,'erer',' rrr', 21,1234567879, 'faridabad','information technology');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student VALUES ( 6,'ramesh',' kumar', 22,1234567654, 'nehrub place','information technology');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO student VALUES ( 7,'rajdeep',' anand', 22,1234567643, 'govindpuri','computer science');
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
+|         7 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri   | computer science       |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+
+
+mysql> insert into Department values (1,' computer science');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into Department values (2,'information technology');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Department values (3,'electrical');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Department values (4,'electronics');
+Query OK, 1 row affected (0.07 sec)
+mysql> select * from Department;
++--------+------------------------+
+| DeptId | S_Department           |
++--------+------------------------+
+|      1 |  computer science      |
+|      2 | information technology |
+|      3 | electrical             |
+|      4 | electronics            |
++--------+------------------------+
+mysql> insert into student_Department values (1,1);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student_Department values (2,3);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into student_Department values (3,4);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into student_Department values (4,1);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into student_Department values (5,2);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student_Department values (6,2);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student_Department values (7,1);
+mysql> select * from student_Department;
++-----------+--------+
+| StudentId | DeptId |
++-----------+--------+
+|         1 |      1 |
+|         2 |      3 |
+|         3 |      4 |
+|         4 |      1 |
+|         5 |      2 |
+|         6 |      2 |
+|         7 |      1 |
++-----------+--------+
+
+mysql> select distinct S_Department from student;
++------------------------+
+| S_Department           |
++------------------------+
+| computer science       |
+| electrical             |
+| electronics            |
+| information technology |
++------------------------+
+
+mysql> select count(StudentId) from student;
++------------------+
+| count(StudentId) |
++------------------+
+|                7 |
++------------------+
+mysql> select count(distinct S_Department) from student;
++------------------------------+
+| count(distinct S_Department) |
++------------------------------+
+|                            4 |
++------------------------------+
+1 row in set (0.00 sec)
+mysql> select * from student order by S_Department;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         7 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+7 rows in set (0.00 sec)
+mysql> select * from student order by firstName;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         7 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri   | computer science       |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+7 rows in set (0.00 sec)
+
+
+mysql> select sum(StudentId) from student where S_Department='computer science';
++----------------+
+| sum(StudentId) |
++----------------+
+|             12 |
++----------------+
+mysql> select max(StudentId) from student where S_Department= 'information technology' ;
++----------------+
+| max(StudentId) |
++----------------+
+|              6 |
++----------------+
+mysql> select min(StudentId) from student where S_Department= 'information technology'; 
++----------------+
+| min(StudentId) |
++----------------+
+|              5 |
++----------------+
+mysql> select avg(phoneNumber) from student;
++------------------+
+| avg(phoneNumber) |
++------------------+
+|  1234567822.5714 |
++------------------+
+mysql> select avg(phoneNumber) from student where S_Department ='computer science';
++------------------+
+| avg(phoneNumber) |
++------------------+
+|  1234567809.3333 |
++------------------+
+mysql> select count(firstName) from student order by firstName;+------------------+
+| count(firstName) |
++------------------+
+|                7 |
++------------------+
+mysql> select count(StudentId) from student;+------------------+
+| count(StudentId) |
++------------------+
+|                7 |
++------------------+
+mysql> select * from student where firstname like '%p';
++-----------+-----------+----------+------+-------------+------------+------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address    | S_Department     |
++-----------+-----------+----------+------+-------------+------------+------------------+
+|         7 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri | computer science |
++-----------+-----------+----------+------+-------------+------------+------------------+
+mysql> select * from student where firstname like 'a%';
++-----------+-----------+----------+------+-------------+------------+------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address    | S_Department     |
++-----------+-----------+----------+------+-------------+------------+------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri | computer science |
++-----------+-----------+----------+------+-------------+------------+------------------+
+mysql> select * from student where firstname like '%a%';
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
+|         7 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri   | computer science       |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+mysql> select * from student limit 3;
++-----------+-----------+----------+------+-------------+------------+------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address    | S_Department     |
++-----------+-----------+----------+------+-------------+------------+------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri | computer science |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji    | electrical       |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji    | electronics      |
++-----------+-----------+----------+------+-------------+------------+------------------+
+mysql> select * from student where age =18  limit 3;
++-----------+-----------+----------+------+-------------+------------+------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address    | S_Department     |
++-----------+-----------+----------+------+-------------+------------+------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri | computer science |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji    | electrical       |
++-----------+-----------+----------+------+-------------+------------+------------------+
+mysql> select * from student where age > 18  limit 3;
++-----------+-----------+----------+------+-------------+-----------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address   | S_Department           |
++-----------+-----------+----------+------+-------------+-----------+------------------------+
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji   | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur  | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad | information technology |
++-----------+-----------+----------+------+-------------+-----------+------------------------+
+
+
+
+mysql> select * from student where S_Department='computer science' and StudentId=1;
++-----------+-----------+----------+------+-------------+------------+------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address    | S_Department     |
++-----------+-----------+----------+------+-------------+------------+------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri | computer science |
++-----------+-----------+----------+------+-------------+------------+------------------+
+
+
+mysql> select * from student where S_Department='computer science' or StudentId= 3;
++-----------+-----------+----------+------+-------------+------------+------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address    | S_Department     |
++-----------+-----------+----------+------+-------------+------------+------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri | computer science |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji    | electronics      |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur   | computer science |
+|         7 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri | computer science |
++-----------+-----------+----------+------+-------------+------------+------------------+
+
+mysql> select * from student where not  S_Department='computer science';
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+mysql> select studentid, S_Department from student where age >20;
++-----------+------------------------+
+| studentid | S_Department           |
++-----------+------------------------+
+|         3 | electronics            |
+|         5 | information technology |
+|         6 | information technology |
+|         7 | computer science       |
++-----------+------------------------+
+
+mysql> select studentid, S_Department from student where age is NULL;
+Empty set (0.00 sec)
+
+mysql> select studentid, S_Department from student where age is not  NULL;
++-----------+------------------------+
+| studentid | S_Department           |
++-----------+------------------------+
+|         1 | computer science       |
+|         2 | electrical             |
+|         3 | electronics            |
+|         4 | computer science       |
+|         5 | information technology |
+|         6 | information technology |
+|         7 | computer science       |
++-----------+------------------------+
+mysql> select studentid, S_Department from student order by studentid desc;
++-----------+------------------------+
+| studentid | S_Department           |
++-----------+------------------------+
+|         7 | computer science       |
+|         6 | information technology |
+|         5 | information technology |
+|         4 | computer science       |
+|         3 | electronics            |
+|         2 | electrical             |
+|         1 | computer science       |
++-----------+------------------------+
+mysql> select studentid, S_Department from student order by  s_Department desc;+-----------+------------------------+
+| studentid | S_Department           |
++-----------+------------------------+
+|         5 | information technology |
+|         6 | information technology |
+|         3 | electronics            |
+|         2 | electrical             |
+|         1 | computer science       |
+|         4 | computer science       |
+|         7 | computer science       |
++-----------+------------------------+
+7 rows in set (0.00 sec)
+mysql> select studentid, S_Department from student where studentid between 3 and 7;
++-----------+------------------------+
+| studentid | S_Department           |
++-----------+------------------------+
+|         3 | electronics            |
+|         4 | computer science       |
+|         5 | information technology |
+|         6 | information technology |
+|         7 | computer science       |
++-----------+------------------------+
+mysql> select studentid, S_Department from student where studentid in(2,5,7);
++-----------+------------------------+
+| studentid | S_Department           |
++-----------+------------------------+
+|         2 | electrical             |
+|         5 | information technology |
+|         7 | computer science       |
++-----------+------------------------+
+3 rows in set (0.02 sec)
+mysql> update student set studentid=8 where studentid=7;
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
+|         8 | rajdeep   |  anand   |   22 |  1234567643 | govindpuri   | computer science       |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+7 rows in set (0.00 sec)
+mysql> update student set studentid=9, firstname ='shankar'  where studentid=8;
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
+|         9 | shankar   |  anand   |   22 |  1234567643 | govindpuri   | computer science       |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+7 rows in set (0.00 sec)
+mysql> delete from student where studentid =9;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+6 rows in set (0.00 sec)
+
+
+
+mysql> alter table Department add studentid int;
+Query OK, 4 rows affected (0.28 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select* from department;
+ERROR 1146 (42S02): Table 'college.department' doesn't exist
+mysql> select * from Department;
++--------+------------------------+-----------+
+| DeptId | S_Department           | studentid |
++--------+------------------------+-----------+
+|      1 |  computer science      |      NULL |
+|      2 | information technology |      NULL |
+|      3 | electrical             |      NULL |
+|      4 | electronics            |      NULL |
++--------+------------------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into Department (studentId) values (1);
+Query OK, 1 row affected, 1 warning (0.07 sec)
+
+mysql> alter table Department add foreign key (StudentId) references student(StudentId);
+Query OK, 5 rows affected (0.34 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select* from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |
++-----------+-----------+----------+------+-------------+--------------+------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select* from Department;
++--------+------------------------+-----------+
+| DeptId | S_Department           | studentid |
++--------+------------------------+-----------+
+|      0 | NULL                   |         1 |
+|      1 |  computer science      |      NULL |
+|      2 | information technology |      NULL |
+|      3 | electrical             |      NULL |
+|      4 | electronics            |      NULL |
++--------+------------------------+-----------+
+5 rows in set (0.00 sec)
+
