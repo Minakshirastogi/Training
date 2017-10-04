@@ -494,4 +494,278 @@ mysql> select* from Department;
 |      4 | electronics            |      NULL |
 +--------+------------------------+-----------+
 5 rows in set (0.00 sec)
+mysql> describe Department;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| DeptId       | int(11)      | NO   | PRI | NULL    |       |
+| S_Department | varchar(200) | YES  |     | NULL    |       |
+| studentid    | int(11)      | YES  | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+mysql> show index from Department;
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table      | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Department |          0 | PRIMARY  |            1 | DeptId      | A         |           4 |     NULL | NULL   |      | BTREE      |         |               |
+| Department |          1 | fk_stud  |            1 | studentid   | A         |           2 |     NULL | NULL   | YES  | BTREE      |         |               |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+2 rows in set (0.02 sec)
+mysql> SHOW CREATE TABLE Department;
++------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table      | Create Table                                                                                                                                                                                                                                                                                                                           |
++------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+| Department | CREATE TABLE `Department` (
+  `DeptId` int(11) NOT NULL,
+  `S_Department` varchar(200) DEFAULT NULL,
+  `studentid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`DeptId`),
+  KEY `fk_stud` (`studentid`),
+  CONSTRAINT `Department_ibfk_1` FOREIGN KEY (`studentid`) REFERENCES `student` (`StudentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
+
+mysql> ALTER TABLE Department DROP FOREIGN KEY Department_ibfk_1; 
+Query OK, 4 rows affected (0.25 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> alter table Department drop index fk_stud;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from Department;
++--------+------------------------+-----------+
+| DeptId | S_Department           | studentid |
++--------+------------------------+-----------+
+|      1 |  computer science      |      NULL |
+|      2 | information technology |      NULL |
+|      3 | electrical             |      NULL |
+|      4 | electronics            |      NULL |
++--------+------------------------+-----------+
+mysql> ALTER TABLE Department DROP COLUMN studentid;
+Query OK, 4 rows affected (0.26 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Department;
++--------+------------------------+
+| DeptId | S_Department           |
++--------+------------------------+
+|      1 |  computer science      |
+|      2 | information technology |
+|      3 | electrical             |
+|      4 | electronics            |
++--------+------------------------+
+
+
+mysql> show create table student;
++---------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                                                                                                        |
++---------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student | CREATE TABLE `student` (
+  `StudentId` int(11) NOT NULL,
+  `FirstName` varchar(200) DEFAULT NULL,
+  `LastName` varchar(100) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `PhoneNumber` int(11) DEFAULT NULL,
+  `Address` varchar(200) DEFAULT NULL,
+  `S_Department` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`StudentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++---------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.02 sec)
+
+mysql> alter table student add DeptId int;
+Query OK, 6 rows affected (0.29 sec)
+
+mysql> update student set DeptId = 1 where StudentID =1;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           | DeptId |
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |      1 |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |   NULL |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |   NULL |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |   NULL |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |   NULL |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |   NULL |
++-----------+-----------+-----mysql> update student set DeptId = 3 where StudentID =2;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set DeptId = 4 where StudentID =3;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set DeptId = 1 where StudentID =4;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set DeptId = 2 where StudentID =5;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set DeptId = 2 where StudentID =6;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           | DeptId |
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |      1 |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |      3 |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |      4 |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |      1 |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |      2 |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |      2 |
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+-----+------+-------------+--------------+------------------------+--------+
+
+mysql> show create table student;
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                                                                                                                                         |
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student | CREATE TABLE `student` (
+  `StudentId` int(11) NOT NULL,
+  `FirstName` varchar(200) DEFAULT NULL,
+  `LastName` varchar(100) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `PhoneNumber` int(11) DEFAULT NULL,
+  `Address` varchar(200) DEFAULT NULL,
+  `S_Department` varchar(200) DEFAULT NULL,
+  `DeptId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`StudentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> show index from student;
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table   | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| student |          0 | PRIMARY  |            1 | StudentId   | A         |           7 |     NULL | NULL   |      | BTREE      |         |               |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+
+
+mysql> alter table student add foreign key (DeptId) references Department(DeptId);
+Query OK, 7 rows affected (0.26 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+
+mysql> show index from student;
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table   | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| student |          0 | PRIMARY  |            1 | StudentId   | A         |           7 |     NULL | NULL   |      | BTREE      |         |               |
+| student |          1 | DeptId   |            1 | DeptId      | A         |           7 |     NULL | NULL   | YES  | BTREE      |         |               |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+
+
+
+mysql> show create table student;
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student | CREATE TABLE `student` (
+  `StudentId` int(11) NOT NULL,
+  `FirstName` varchar(200) DEFAULT NULL,
+  `LastName` varchar(100) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `PhoneNumber` int(11) DEFAULT NULL,
+  `Address` varchar(200) DEFAULT NULL,
+  `S_Department` varchar(200) DEFAULT NULL,
+  `DeptId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`StudentId`),
+  KEY `DeptId` (`DeptId`),
+  CONSTRAINT `student_ibfk_1` FOREIGN KEY (`DeptId`) REFERENCES `Department` (`DeptId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> alter table  Department add Hod varchar (200);
+Query OK, 4 rows affected (0.28 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> update Department set hod ='mr rahul' where DeptId = 1;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Department set hod ='mr sandeep' where DeptId = 4;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Department set hod ='mr sameer' where DeptId = 3;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Department set hod ='miss deepika' where DeptId = 2;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Department;
++--------+------------------------+--------------+
+| DeptId | S_Department           | Hod          |
++--------+------------------------+--------------+
+|      1 |  computer science      | mr rahul     |
+|      2 | information technology | miss deepika |
+|      3 | electrical             | mr sameer    |
+|      4 | electronics            | mr sandeep   |
++--------+------------------------+--------------+
+4 rows in set (0.00 sec)
+
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | S_Department           | DeptId |
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   | computer science       |      1 |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      | electrical             |      3 |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      | electronics            |      4 |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     | computer science       |      1 |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    | information technology |      2 |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place | information technology |      2 |
+|         7 | abab      | dbdb     |   25 |  2147483647 | saket        | electrical             |      3 |
++-----------+-----------+----------+------+-------------+--------------+------------------------+--------+
+7 rows in set (0.00 sec)
+
+mysql> alter table student drop column S_Department;
+Query OK, 7 rows affected (0.25 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++-----------+-----------+----------+------+-------------+--------------+--------+
+| StudentId | FirstName | LastName | Age  | PhoneNumber | Address      | DeptId |
++-----------+-----------+----------+------+-------------+--------------+--------+
+|         1 | ab        |  bc      |   18 |  1234567897 | govindpuri   |      1 |
+|         2 | de        |  fg      |   18 |  1234567898 | kalkaji      |      3 |
+|         3 | ef        |  re      |   23 |  1234567899 | kalkaji      |      4 |
+|         4 | eg        |  rf      |   20 |  1234567888 | badarpur     |      1 |
+|         5 | erer      |  rrr     |   21 |  1234567879 | faridabad    |      2 |
+|         6 | ramesh    |  kumar   |   22 |  1234567654 | nehrub place |      2 |
+|         7 | abab      | dbdb     |   25 |  2147483647 | saket        |      3 |
++-----------+-----------+----------+------+-------------+--------------+--------+
+7 rows in set (0.00 sec)
+
+
+
+mysql> select student.StudentID,student.Firstname,Department.DeptId,Department.Hod from student, Department  where student.DeptID = Department.DeptId order by student.StudentId;
++-----------+-----------+--------+--------------+
+| StudentID | Firstname | DeptId | Hod          |
++-----------+-----------+--------+--------------+
+|         1 | ab        |      1 | mr rahul     |
+|         2 | de        |      3 | mr sameer    |
+|         3 | ef        |      4 | mr sandeep   |
+|         4 | eg        |      1 | mr rahul     |
+|         5 | erer      |      2 | miss deepika |
+|         6 | ramesh    |      2 | miss deepika |
+|         7 | abab      |      3 | mr sameer    |
++-----------+-----------+--------+--------------+
+
+
+
+
 
