@@ -1,0 +1,762 @@
+mysql> create database student;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use student;
+Database changed
+mysql> create table student1(studentid int not null primary key,name varchar(50), address varchar(50));
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> insert into student1 values (1,'sandeep' , 'delhi');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student1 values (2,'anand' , 'delhi');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student1 values (3,'anand' , 'delhi');\
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student1;
++-----------+---------+---------+
+| studentid | name    | address |
++-----------+---------+---------+
+|         1 | sandeep | delhi   |
+|         2 | anand   | delhi   |
+|         3 | anand   | delhi   |
++-----------+---------+---------+
+3 rows in set (0.00 sec)
+
+mysql> alter table student1 add deptid int;
+Query OK, 3 rows affected (0.32 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from student1;
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |   NULL |
+|         2 | anand   | delhi   |   NULL |
+|         3 | anand   | delhi   |   NULL |
++-----------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> update student1 set deptid =1 where studentid =1;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student1 set deptid =2 where studentid =2;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student1 set deptid =2 where studentid =3;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+mysql> create table dept (deptid int not null primary key, sub varchar(50), hod varchar (50));
+
+mysql> insert into dept(1,'comp','sameer');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'comp','sameer')' at line 1
+mysql> insert into dept values (1,'comp','sameer');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into dept values (2,'maths','suresh');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from dept;
++--------+-------+--------+
+| deptid | sub   | hod    |
++--------+-------+--------+
+|      1 | comp  | sameer |
+|      2 | maths | suresh |
++--------+-------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student1;
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
++-----------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> describe student1;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| studentid | int(11)     | NO   | PRI | NULL    |       |
+| name      | varchar(50) | YES  |     | NULL    |       |
+| address   | varchar(50) | YES  |     | NULL    |       |
+| deptid    | int(11)     | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+mysql> describe dept;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| deptid | int(11)     | NO   | PRI | NULL    |       |
+| sub    | varchar(50) | YES  |     | NULL    |       |
+| hod    | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show create table student1;
++----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                           |
++----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student1 | CREATE TABLE `student1` (
+  `studentid` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `deptid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`studentid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> show create table dept;
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                           |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| dept  | CREATE TABLE `dept` (
+  `deptid` int(11) NOT NULL,
+  `sub` varchar(50) DEFAULT NULL,
+  `hod` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`deptid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select student1.studentid , student1.name, dept.hod,dept.sub from student1,dept where student1.deptid=dept.deptid;
++-----------+---------+--------+-------+
+| studentid | name    | hod    | sub   |
++-----------+---------+--------+-------+
+|         1 | sandeep | sameer | comp  |
+|         2 | anand   | suresh | maths |
+|         3 | anand   | suresh | maths |
++-----------+---------+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show create table student1;
++----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                           |
++----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student1 | CREATE TABLE `student1` (
+  `studentid` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `deptid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`studentid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> show create table dept;
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                           |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| dept  | CREATE TABLE `dept` (
+  `deptid` int(11) NOT NULL,
+  `sub` varchar(50) DEFAULT NULL,
+  `hod` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`deptid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table student1 add foreign key (deptid) references dept(deptid);
+Query OK, 3 rows affected (0.35 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> show create table dept;
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                           |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| dept  | CREATE TABLE `dept` (
+  `deptid` int(11) NOT NULL,
+  `sub` varchar(50) DEFAULT NULL,
+  `hod` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`deptid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> show create table student1;
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                                                                                                                                          |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student1 | CREATE TABLE `student1` (
+  `studentid` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `deptid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`studentid`),
+  KEY `deptid` (`deptid`),
+  CONSTRAINT `student1_ibfk_1` FOREIGN KEY (`deptid`) REFERENCES `dept` (`deptid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table student1 drop foreign key student1_ibfk_1;
+Query OK, 3 rows affected (0.23 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> show create table student1;
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                                                      |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| student1 | CREATE TABLE `student1` (
+  `studentid` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `deptid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`studentid`),
+  KEY `deptid` (`deptid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> insert into dept values (3,'science','anas');
+Query OK, 1 row affected (0.04 sec)
+mysql> insert into student1  values (4,'sonal','saket', 1);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from dept;
++--------+---------+--------+
+| deptid | sub     | hod    |
++--------+---------+--------+
+|      1 | comp    | sameer |
+|      2 | maths   | suresh |
+|      3 | science | anas   |
++--------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student1;
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
+|         4 | sonal   | saket   |      1 |
++-----------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from dept inner join student1 on student1.deptid=dept.deptid;
++--------+-------+--------+-----------+---------+---------+--------+
+| deptid | sub   | hod    | studentid | name    | address | deptid |
++--------+-------+--------+-----------+---------+---------+--------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths | suresh |         3 | anand   | delhi   |      2 |
+|      1 | comp  | sameer |         4 | sonal   | saket   |      1 |
++--------+-------+--------+-----------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+
+mysql> select * from dept natural  join student1 ;
++--------+-------+--------+-----------+---------+---------+
+| deptid | sub   | hod    | studentid | name    | address |
++--------+-------+--------+-----------+---------+---------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |
+|      2 | maths | suresh |         2 | anand   | delhi   |
+|      2 | maths | suresh |         3 | anand   | delhi   |
+|      1 | comp  | sameer |         4 | sonal   | saket   |
++--------+-------+--------+-----------+---------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from dept cross  join student1 ;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths   | suresh |         1 | sandeep | delhi   |      1 |
+|      3 | science | anas   |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      3 | science | anas   |         2 | anand   | delhi   |      2 |
+|      1 | comp    | sameer |         3 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |         3 | anand   | delhi   |      2 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         4 | sonal   | saket   |      1 |
+|      3 | science | anas   |         4 | sonal   | saket   |      1 |
++--------+---------+--------+-----------+---------+---------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select * from dept left  join student1 on student1.deptid=dept.deptid;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |      NULL | NULL    | NULL    |   NULL |
++--------+---------+--------+-----------+---------+---------+--------+
+5 rows in set (0.02 sec)
+
+mysql> select * from dept right join  student1 on student1.deptid=dept.deptid;
++--------+-------+--------+-----------+---------+---------+--------+
+| deptid | sub   | hod    | studentid | name    | address | deptid |
++--------+-------+--------+-----------+---------+---------+--------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths | suresh |         3 | anand   | delhi   |      2 |
+|      1 | comp  | sameer |         4 | sonal   | saket   |      1 |
++--------+-------+--------+-----------+---------+---------+--------+
+mysql> select * from dept left  join student1 on student1.deptid=dept.deptid
+    -> union
+    -> select * from dept right join  student1 on student1.deptid=dept.deptid;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |      NULL | NULL    | NULL    |   NULL |
++--------+---------+--------+-----------+---------+---------+--------+
+5 rows in set (0.04 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+mysql> insert into student1 values (5,'somya','vns',4);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from student1;
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
+|         4 | sonal   | saket   |      1 |
+|         5 | somya   | vns     |      4 |
++-----------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+---------+--------+
+| deptid | sub     | hod    |
++--------+---------+--------+
+|      1 | comp    | sameer |
+|      2 | maths   | suresh |
+|      3 | science | anas   |
++--------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from dept inner join student1 on student1.deptid=dept.deptid;
++--------+-------+--------+-----------+---------+---------+--------+
+| deptid | sub   | hod    | studentid | name    | address | deptid |
++--------+-------+--------+-----------+---------+---------+--------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths | suresh |         3 | anand   | delhi   |      2 |
+|      1 | comp  | sameer |         4 | sonal   | saket   |      1 |
++--------+-------+--------+-----------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from dept natural  join student1 ;
++--------+-------+--------+-----------+---------+---------+
+| deptid | sub   | hod    | studentid | name    | address |
++--------+-------+--------+-----------+---------+---------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |
+|      2 | maths | suresh |         2 | anand   | delhi   |
+|      2 | maths | suresh |         3 | anand   | delhi   |
+|      1 | comp  | sameer |         4 | sonal   | saket   |
++--------+-------+--------+-----------+---------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from dept cross  join student1 ;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths   | suresh |         1 | sandeep | delhi   |      1 |
+|      3 | science | anas   |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      3 | science | anas   |         2 | anand   | delhi   |      2 |
+|      1 | comp    | sameer |         3 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |         3 | anand   | delhi   |      2 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         4 | sonal   | saket   |      1 |
+|      3 | science | anas   |         4 | sonal   | saket   |      1 |
+|      1 | comp    | sameer |         5 | somya   | vns     |      4 |
+|      2 | maths   | suresh |         5 | somya   | vns     |      4 |
+|      3 | science | anas   |         5 | somya   | vns     |      4 |
++--------+---------+--------+-----------+---------+---------+--------+
+15 rows in set (0.00 sec)
+
+mysql> select * from dept,student1;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths   | suresh |         1 | sandeep | delhi   |      1 |
+|      3 | science | anas   |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      3 | science | anas   |         2 | anand   | delhi   |      2 |
+|      1 | comp    | sameer |         3 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |         3 | anand   | delhi   |      2 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         4 | sonal   | saket   |      1 |
+|      3 | science | anas   |         4 | sonal   | saket   |      1 |
+|      1 | comp    | sameer |         5 | somya   | vns     |      4 |
+|      2 | maths   | suresh |         5 | somya   | vns     |      4 |
+|      3 | science | anas   |         5 | somya   | vns     |      4 |
++--------+---------+--------+-----------+---------+---------+--------+
+15 rows in set (0.00 sec)
+
+mysql> select * from dept,student1 where dept.deptid=student1.deptid;
++--------+-------+--------+-----------+---------+---------+--------+
+| deptid | sub   | hod    | studentid | name    | address | deptid |
++--------+-------+--------+-----------+---------+---------+--------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths | suresh |         3 | anand   | delhi   |      2 |
+|      1 | comp  | sameer |         4 | sonal   | saket   |      1 |
++--------+-------+--------+-----------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from dept left  join student1 on student1.deptid=dept.deptid;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |      NULL | NULL    | NULL    |   NULL |
++--------+---------+--------+-----------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from dept right join  student1 on student1.deptid=dept.deptid;
++--------+-------+--------+-----------+---------+---------+--------+
+| deptid | sub   | hod    | studentid | name    | address | deptid |
++--------+-------+--------+-----------+---------+---------+--------+
+|      1 | comp  | sameer |         1 | sandeep | delhi   |      1 |
+|      2 | maths | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths | suresh |         3 | anand   | delhi   |      2 |
+|      1 | comp  | sameer |         4 | sonal   | saket   |      1 |
+|   NULL | NULL  | NULL   |         5 | somya   | vns     |      4 |
++--------+-------+--------+-----------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from dept left  join student1 on student1.deptid=dept.deptid
+    -> union
+    -> select * from dept right join  student1 on student1.deptid=dept.deptid;
++--------+---------+--------+-----------+---------+---------+--------+
+| deptid | sub     | hod    | studentid | name    | address | deptid |
++--------+---------+--------+-----------+---------+---------+--------+
+|      1 | comp    | sameer |         1 | sandeep | delhi   |      1 |
+|      1 | comp    | sameer |         4 | sonal   | saket   |      1 |
+|      2 | maths   | suresh |         2 | anand   | delhi   |      2 |
+|      2 | maths   | suresh |         3 | anand   | delhi   |      2 |
+|      3 | science | anas   |      NULL | NULL    | NULL    |   NULL |
+|   NULL | NULL    | NULL   |         5 | somya   | vns     |      4 |
+
+
+
+
+
+
+
+mysql> select distinct name from student1;
++---------+
+| name    |
++---------+
+| sandeep |
+| anand   |
+| sonal   |
+| somya   |
++---------+
+4 rows in set (0.00 sec)
+
+mysql> select sum(studentid) from student1;
++----------------+
+| sum(studentid) |
++----------------+
+|             15 |
++----------------+
+1 row in set (0.08 sec)
+
+mysql> select min(studentid) from student1;
++----------------+
+| min(studentid) |
++----------------+
+|              1 |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> select max(studentid) from student1;
++----------------+
+| max(studentid) |
++----------------+
+|              5 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select count(studentid) from student1;
++------------------+
+| count(studentid) |
++------------------+
+|                5 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(name) from student1;
++-------------+
+| count(name) |
++-------------+
+|           5 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select * from student1 where name like 's%';
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         4 | sonal   | saket   |      1 |
+|         5 | somya   | vns     |      4 |
++-----------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student1 where name like 's%' limit 2;
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         4 | sonal   | saket   |      1 |
++-----------+---------+---------+--------+
+2 rows in set (0.02 sec)
+
+mysql> select * from student1 where studentid between 3 and 5;
++-----------+-------+---------+--------+
+| studentid | name  | address | deptid |
++-----------+-------+---------+--------+
+|         3 | anand | delhi   |      2 |
+|         4 | sonal | saket   |      1 |
+|         5 | somya | vns     |      4 |
++-----------+-------+---------+--------+
+3 rows in set (0.04 sec)
+
+mysql> select * from student1 where address ='delhi' or address ='vns';
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
+|         5 | somya   | vns     |      4 |
++-----------+---------+---------+--------+
+4 rows in set (0.02 sec)
+
+mysql> select * from student1 where address ='delhi' and  address ='vns';
+Empty set (0.00 sec)
+
+mysql> select * from student1 where address ='delhi' and not adress ='vns';
+ERROR 1054 (42S22): Unknown column 'adress' in 'where clause'
+mysql> select * from student1 where address ='delhi' and not address ='vns';
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
++-----------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student1 where address ='delhi'or address ='vns'  and not address ='vns';
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
++-----------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student1 where address ='delhi'or address ='saket'  and not address ='vns';
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
+|         4 | sonal   | saket   |      1 |
++-----------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from student1 order by deptid;
++-----------+---------+---------+--------+
+| studentid | name    | address | deptid |
++-----------+---------+---------+--------+
+|         1 | sandeep | delhi   |      1 |
+|         4 | sonal   | saket   |      1 |
+|         2 | anand   | delhi   |      2 |
+|         3 | anand   | delhi   |      2 |
+|         5 | somya   | vns     |      4 |
++-----------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select count(name) from student1 group by name;
++-------------+
+| count(name) |
++-------------+
+|           2 |
+|           1 |
+|           1 |
+|           1 |
++-------------+
+4 rows in set (0.02 sec)
+
+mysql> select count(name) from student1 group by studentid;
++-------------+
+| count(name) |
++-------------+
+|           1 |
+|           1 |
+|           1 |
+|           1 |
+|           1 |
++-------------+
+5 rows in set (0.00 sec)
+
+mysql> create table stud ( stuname varchar, stuid int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' stuid int)' at line 1
+mysql> create table stud ( stuname varchar (30), stuid int);
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> insert into stud ('abc' ,10);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''abc' ,10)' at line 1
+mysql> insert into stud values ('abc' ,10);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into stud values ('def' ,20);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into stud values ('ijk' ,30);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from stud;
++---------+-------+
+| stuname | stuid |
++---------+-------+
+| abc     |    10 |
+| def     |    20 |
+| ijk     |    30 |
++---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show create table stud;
++-------+-----------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                      |
++-------+-----------------------------------------------------------------------------------------------------------------------------------+
+| stud  | CREATE TABLE `stud` (
+  `stuname` varchar(30) DEFAULT NULL,
+  `stuid` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+-----------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table stud add primary key (studid);
+ERROR 1072 (42000): Key column 'studid' doesn't exist in table
+mysql> alter table stud add primary key (stuid);
+Query OK, 3 rows affected (0.28 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> show create table stud;
++-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                       |
++-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| stud  | CREATE TABLE `stud` (
+  `stuname` varchar(30) DEFAULT NULL,
+  `stuid` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`stuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table stud drop primary key;
+Query OK, 3 rows affected (0.35 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> show create table stud;
++-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                              |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+| stud  | CREATE TABLE `stud` (
+  `stuname` varchar(30) DEFAULT NULL,
+  `stuid` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table stud add adress varchar(100);
+Query OK, 3 rows affected (0.26 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud;
++---------+-------+--------+
+| stuname | stuid | adress |
++---------+-------+--------+
+| abc     |    10 | NULL   |
+| def     |    20 | NULL   |
+| ijk     |    30 | NULL   |
++---------+-------+--------+
+3 rows in set (0.00 sec)
+
+mysql> alter table stud drop column address;
+ERROR 1091 (42000): Can't DROP 'address'; check that column/key exists
+mysql> alter table stud drop column adress;
+Query OK, 3 rows affected (0.27 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud;
++---------+-------+
+| stuname | stuid |
++---------+-------+
+| abc     |    10 |
+| def     |    20 |
+| ijk     |    30 |
++---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> drop table stud;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_student |
++-------------------+
+| dept              |
+| student1          |
++-------------------+
+
+
+
+
+
+
+
+
+
+
+
