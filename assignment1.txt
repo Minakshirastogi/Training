@@ -1,0 +1,183 @@
+mysql> select * from flight;
++------+-------------+-----------+----------+----------+----------+-------+
+| flno | from1       | to1       | distance | departs  | arrives  | price |
++------+-------------+-----------+----------+----------+----------+-------+
+|  120 | chennai     | mumbai    |     1333 | 06:00:00 | 09:00:00 |  3500 |
+|  612 | delhi       | varanasi  |      833 | 04:00:00 | 05:25:00 |  3500 |
+| 1205 | varanasi    | jaipur    |      855 | 13:00:00 | 17:25:00 |  4700 |
+| 1234 | kolkata     | delhi     |     1500 | 08:00:00 | 10:00:00 |  4000 |
+| 1406 | delhi       | jaipur    |      241 | 12:00:00 | 13:00:00 |  1200 |
+| 1515 | los Angeles | honolulu  |     2000 | 18:00:00 | 20:30:00 |  5000 |
+| 1616 | los Angeles | chicago   |     2200 | 17:00:00 | 19:30:00 |  5000 |
+| 1640 | mumbai      | pune      |      150 | 20:55:00 | 21:15:00 |  1000 |
+| 1858 | delhi       | hyderabad |     1600 | 20:00:00 | 22:40:00 |  4500 |
+| 1970 | pune        | bangalore |      841 | 16:45:00 | 18:55:00 |  3200 |
++------+-------------+-----------+----------+----------+----------+-------+
+10 rows in set (0.00 sec)
+
+mysql> select * from aircraft;
++-----+-----------+--------------+
+| aid | aname     | crusingrange |
++-----+-----------+--------------+
+| 132 | air asia  |         6000 |
+| 234 | air india |         2000 |
+| 252 | indigo    |         2500 |
+| 391 | spice jet |         5000 |
+| 450 | vistara   |         6000 |
+| 555 | boeing    |         3000 |
++-----+-----------+--------------+
+
+mysql> select * from certified;
++------+------+
+| eid  | aid  |
++------+------+
+|    1 |  234 |
+|    2 |  252 |
+|    4 |  391 |
+|    5 |  450 |
+|    8 |  132 |
+|    9 |  450 |
+|    1 |  391 |
+|    1 |  132 |
+|    2 |  391 |
+|    4 |  450 |
+|    1 |  252 |
+|    2 |  132 |
+|    2 |  234 |
+|    2 |  555 |
++------+------+
+
+mysql> select * from employees;
++-----+---------+--------+
+| eid | ename   | salary |
++-----+---------+--------+
+|   1 | sam     |  20000 |
+|   2 | rohit   |  80000 |
+|   3 | rahul   |  40000 |
+|   4 | sameer  |  90000 |
+|   5 | sovit   |  80000 |
+|   6 | sandeep |  20000 |
+|   7 | alok    |  60000 |
+|   8 | akash   |  40000 |
+|   9 | puneet  |  80000 |
+|  10 | raj     | 100000 |
++-----+---------+--------+
+--+
+
+
+A.
+
+mysql> select aircraft.aname from aircraft where aircraft.aid in ( select certified.aid from certified,employees where certified.eid = employees.eid and employees.salary >= 80000);
++-----------+
+| aname     |
++-----------+
+| indigo    |
+| spice jet |
+| vistara   |
++-----------+
+ 
+B.
+
+mysql> select certified.eid, max(aircraft.crusingrange) from certified, aircraft where certified.aid= aircraft.aid group by certified.eid having  count(*) > 3;
++------+----------------------------+
+| eid  | max(aircraft.crusingrange) |
++------+----------------------------+
+|    1 |                       6000 |
+|    2 |                       6000 |
++------+----------------------------+
+2 rows in set (0.00 sec)
+
+
+C.
+
+mysql> select employees.ename from employees where employees.salary < (select min(flight.price)from flight where flight.from1='los Angeles' and flight.to1 = 'honolulu');
++--------+
+| ename  |
++--------+
+| ramesh |
+| samesh |
++--------+
+2 rows in set (0.00 sec)
+
+
+D.
+
+mysql> select aircraft.aname,avg (employees.salary) from aircraft,certified, employees where employees.eid=certified.eid and certified.aid= aircraft.aid and aircraft.crusingrange >1000 group by aircraft.aname;
++-----------+------------------------+
+| aname     | avg (employees.salary) |
++-----------+------------------------+
+| air asia  |             46666.6667 |
+| air india |             50000.0000 |
+| boeing    |             80000.0000 |
+| indigo    |             50000.0000 |
+| spice jet |             63333.3333 |
+| vistara   |             83333.3333 |
++-----------+------------------------+
+6 rows in set (0.00 sec)
+
+E. 
+
+mysql> select employees.ename from employees,certified,aircraft where employees.eid=certified.eid and certified.aid=aircraft.aid and aircraft.aname like 'boeing%';
++-------+
+| ename |
++-------+
+| rohit |
++-------+
+1 row in set (0.00 sec)
+
+
+F. 
+
+mysql> select aircraft.aid from aircraft where aircraft.crusingrange > (select min(flight.distance) from flight where flight.from1='los Angeles' and flight.to1='chicago');
++-----+
+| aid |
++-----+
+| 132 |
+| 252 |
+| 391 |
+| 450 |
+| 555 |
++-----+
+5 rows in set (0.00 sec)
+
+
+H.
+
+mysql> select employees.ename from employees where employees.eid in( select certified.eid from certified ,aircraft where certified.aid=aircraft.aid and aircraft.crusingrange> 3000 and aircraft.aname not like 'boeing%');
++--------+
+| ename  |
++--------+
+| sam    |
+| rohit  |
+| sameer |
+| sovit  |
+| akash  |
+| puneet |
++--------+
+
+
+L.
+
+
+mysql> select employees.ename from employees,certified,aircraft where employees.eid=certified.eid and certified.aid= aircraft.aid and aircraft.crusingrange> 1000 group by employees.ename;
++--------+
+| ename  |
++--------+
+| akash  |
+| puneet |
+| rohit  |
+| sam    |
+| sameer |
+| sovit  |
++--------+
+
+
+mysql> select employees.ename from employees,certified,aircraft where employees.eid=certified.eid and certified.aid= aircraft.aid  and aircraft.crusingrange  > 1000 and aircraft.aname like'boeing%';
++-------+
+| ename |
++-------+
+| rohit |
++-------+
+
+
+
