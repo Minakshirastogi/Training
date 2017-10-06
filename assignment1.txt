@@ -65,7 +65,7 @@ mysql> select * from employees;
 --+
 
 
-A.
+A. Find the names of aircraft such that all pilots certified to operate them earn more than $80,000. 
 
 mysql> select aircraft.aname from aircraft where aircraft.aid in ( select certified.aid from certified,employees where certified.eid = employees.eid and employees.salary >= 80000);
 +-----------+
@@ -76,7 +76,7 @@ mysql> select aircraft.aname from aircraft where aircraft.aid in ( select certif
 | vistara   |
 +-----------+
  
-B.
+B.For each pilot who is certified for more than three aircraft, find the eid and the maximum cruisingrange of the aircraft for which she or he is certified.   
 
 mysql> select certified.eid, max(aircraft.crusingrange) from certified, aircraft where certified.aid= aircraft.aid group by certified.eid having  count(*) > 3;
 +------+----------------------------+
@@ -88,7 +88,7 @@ mysql> select certified.eid, max(aircraft.crusingrange) from certified, aircraft
 2 rows in set (0.00 sec)
 
 
-C.
+C.Find the names of pilots whose salary is less than the price of the cheapest route from Los Angeles to Honolulu. 
 
 mysql> select employees.ename from employees where employees.salary < (select min(flight.price)from flight where flight.from1='los Angeles' and flight.to1 = 'honolulu');
 +--------+
@@ -100,7 +100,7 @@ mysql> select employees.ename from employees where employees.salary < (select mi
 2 rows in set (0.00 sec)
 
 
-D.
+D.For all aircraft with cruisingrange over 1000 miles, find the name of the aircraft and the average salary of all pilots certified for this aircraft. 
 
 mysql> select aircraft.aname,avg (employees.salary) from aircraft,certified, employees where employees.eid=certified.eid and certified.aid= aircraft.aid and aircraft.crusingrange >1000 group by aircraft.aname;
 +-----------+------------------------+
@@ -115,7 +115,7 @@ mysql> select aircraft.aname,avg (employees.salary) from aircraft,certified, emp
 +-----------+------------------------+
 6 rows in set (0.00 sec)
 
-E. 
+E.  Find the names of pilots certified for some Boeing aircraft.
 
 mysql> select employees.ename from employees,certified,aircraft where employees.eid=certified.eid and certified.aid=aircraft.aid and aircraft.aname like 'boeing%';
 +-------+
@@ -126,7 +126,7 @@ mysql> select employees.ename from employees,certified,aircraft where employees.
 1 row in set (0.00 sec)
 
 
-F. 
+F. Find the aids of all aircraft that can be used on routes from Los Angeles to Chicago
 
 mysql> select aircraft.aid from aircraft where aircraft.crusingrange > (select min(flight.distance) from flight where flight.from1='los Angeles' and flight.to1='chicago');
 +-----+
@@ -140,8 +140,29 @@ mysql> select aircraft.aid from aircraft where aircraft.crusingrange > (select m
 +-----+
 5 rows in set (0.00 sec)
 
+G. Identify the routes that can be piloted by every pilot who makes more than $100,000.
 
-H.
+
+mysql> select distinct flight.from1, flight.to1 from flight,aircraft,employees,certified where aircraft.crusingrange > flight.distance and employees.salary >=90000 and employees.eid= certified.eid and certified.aid=aircraft.aid;
++-------------+-----------+
+| from1       | to1       |
++-------------+-----------+
+| chennai     | mumbai    |
+| delhi       | varanasi  |
+| varanasi    | jaipur    |
+| kolkata     | delhi     |
+| delhi       | jaipur    |
+| los Angeles | honolulu  |
+| los Angeles | chicago   |
+| mumbai      | pune      |
+| delhi       | hyderabad |
+| pune        | bangalore |
++-------------+-----------+
+
+
+
+
+H.Print the enames of pilots who can operate planes with cruisingrange greater than 3000 miles but are not certified on any Boeing aircraft. 
 
 mysql> select employees.ename from employees where employees.eid in( select certified.eid from certified ,aircraft where certified.aid=aircraft.aid and aircraft.crusingrange> 3000 and aircraft.aname not like 'boeing%');
 +--------+
@@ -155,8 +176,37 @@ mysql> select employees.ename from employees where employees.eid in( select cert
 | puneet |
 +--------+
 
+I. A customer wants to travel from Madison to New York with no more than two changes of flight. List the choice of departure times from Madison if the customer wants to arrive in New York by 6 p.m. 
 
-L.
+J. Compute the difference between the average salary of a pilot and the average salary of all employees (including pilots). 
+
+
+
+mysql> select pilotsalary.avg-totalsalary.avg from( select avg (salary) as avg from employees where employees.eid in ( select distinct employees.eid from employees,certified where employees.eid = certified.eid)) as pilotsalary , (select  avg(salary) as avg from employees) as totalsalary;
++---------------------------------+
+| pilotsalary.avg-totalsalary.avg |
++---------------------------------+
+|                      13583.3333 |
++---------------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+K. Print the name and salary of every nonpilot whose salary is more than the average salary for pilots. 
+
+
+mysql> select ename,salary from employees where salary > (select avg(salary) from employees where eid in (select distinct employees.eid from employees,certified where employees.eid= certified.eid)) and eid not in (select distinct eid from certified);
++-------+--------+
+| ename | salary |
++-------+--------+
+| raj   | 100000 |
++-------+--------+
+
+
+
+
+L.Print the names of employees who are certified only on aircrafts with cruising range longer than 1000 miles. 
 
 
 mysql> select employees.ename from employees,certified,aircraft where employees.eid=certified.eid and certified.aid= aircraft.aid and aircraft.crusingrange> 1000 group by employees.ename;
@@ -170,6 +220,24 @@ mysql> select employees.ename from employees,certified,aircraft where employees.
 | sameer |
 | sovit  |
 +--------+
+
+M. Print the names of employees who are certified only on aircrafts with cruising range longer than 1000 miles, but on at least two such aircrafts. 
+
+
+
+mysql> select employees.ename from employees ,certified, aircraft where employees.eid=certified.eid and aircraft.aid=certified.aid and aircraft.crusingrange >1000 group by employees.eid having count(employees.ename)>1 ;
++--------+
+| ename  |
++--------+
+| sam    |
+| rohit  |
+| sameer |
++--------+
+
+
+
+
+N. Print the names of employees who are certified only on aircrafts with cruising range longer than 1000 miles and who are certified on some Boeing aircraft. 
 
 
 mysql> select employees.ename from employees,certified,aircraft where employees.eid=certified.eid and certified.aid= aircraft.aid  and aircraft.crusingrange  > 1000 and aircraft.aname like'boeing%';
